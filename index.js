@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   const stopButton = document.getElementById("stopButton");
   const recordButton = document.getElementById("recordButton");
   const recordedTimesList = document.getElementById("recordedTimes");
-
   function updateTimerDisplay() {
     const time = new Date(elapsedTime);
     const hours = String(time.getUTCHours()).padStart(2, "0");
@@ -25,13 +24,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }, 1000);
     startButton.disabled = true;
     stopButton.disabled = false;
-    recordButton.disabled = false;
+    recordButton.disabled = true;
   }
 
   function stopTimer() {
     clearInterval(timer);
     startButton.disabled = false;
     stopButton.disabled = true;
+    recordButton.disabled = false;
   }
 
   function recordTime() {
