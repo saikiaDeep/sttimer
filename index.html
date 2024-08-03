@@ -1,22 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Timer</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
-    <div id="timer">00:00</div>
-    <button onclick="startTimer()">Start</button>
-    <button onclick="stopTimer()">Stop</button>
-    <button onclick="resetTimer()">Reset</button>
-    <div id="log"></div>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-6 offset-md-3 text-center">
+                <h1>Study Timer</h1>
+                <div id="timer" class="display-4">00:00:00</div>
+                <button id="startButton" class="btn btn-success btn-lg mx-2">Start</button>
+                <button id="stopButton" class="btn btn-danger btn-lg mx-2">Stop</button>
+                <button id="recordButton" class="btn btn-primary btn-lg mx-2">Record</button>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-6 offset-md-3">
+                <h2>Recorded Times</h2>
+                <ul id="recordedTimes" class="list-group">
+                    <!-- List items will be appended here -->
+                </ul>
+            </div>
+        </div>
+    </div>
 
-    <script src="index.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
