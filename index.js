@@ -1,62 +1,78 @@
-let timer;
-let startTime;
-let elapsedTime = 0;
+document.addEventListener("DOMContentLoaded", (event) => {
+  let timer;
+  let startTime;
+  let elapsedTime = 0;
 
-function updateTime() {
-  const now = new Date().getTime();
-  const diff = now - startTime + elapsedTime;
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  document.getElementById("timer").innerText =
-    (hours < 10 ? "0" : "") + hours + ":" + (minutes < 10 ? "0" : "") + minutes;
-}
+  const timerDisplay = document.getElementById("timer");
+  const startButton = document.getElementById("startButton");
+  const stopButton = document.getElementById("stopButton");
+  const recordButton = document.getElementById("recordButton");
+  const recordedTimesList = document.getElementById("recordedTimes");
 
-function startTimer() {
-  if (!timer) {
-    startTime = new Date().getTime();
-    timer = setInterval(updateTime, 1000);
+  function updateTimerDisplay() {
+    const time = new Date(elapsedTime);
+    const hours = String(time.getUTCHours()).padStart(2, "0");
+    const minutes = String(time.getUTCMinutes()).padStart(2, "0");
+    const seconds = String(time.getUTCSeconds()).padStart(2, "0");
+    timerDisplay.textContent = `${hours}:${minutes}:${seconds}`;
   }
-}
 
-function stopTimer() {
-  if (timer) {
+  function startTimer() {
+    startTime = Date.now() - elapsedTime;
+    timer = setInterval(() => {
+      elapsedTime = Date.now() - startTime;
+      updateTimerDisplay();
+    }, 1000);
+    startButton.disabled = true;
+    stopButton.disabled = false;
+    recordButton.disabled = false;
+  }
+
+  function stopTimer() {
     clearInterval(timer);
-    timer = null;
-    elapsedTime += new Date().getTime() - startTime;
+    startButton.disabled = false;
+    stopButton.disabled = true;
   }
-}
 
-function resetTimer() {
-  stopTimer();
-  elapsedTime = 0;
-  document.getElementById("timer").innerText = "00:00";
-}
-
-function logTime() {
-  const now = new Date();
-  const day = now.toLocaleDateString();
-  const log = document.getElementById("log");
-  const entry = document.createElement("div");
-  entry.classList.add("log-entry");
-  entry.innerText = `${day}: ${document.getElementById("timer").innerText}`;
-  log.appendChild(entry);
-}
-
-function checkNewDay() {
-  const now = new Date();
-  const lastLogDate = localStorage.getItem("lastLogDate");
-  if (
-    lastLogDate &&
-    new Date(lastLogDate).toDateString() !== now.toDateString()
-  ) {
-    logTime();
-    localStorage.setItem("lastLogDate", now);
+  function recordTime() {
+    const today = new Date().toISOString().split("T")[0]; // Format: YYYY-MM-DD
+    const storedTimes = JSON.parse(localStorage.getItem("studyTimes")) || {};
+    if (storedTimes[today]) {
+      storedTimes[today] += elapsedTime;
+    } else {
+      storedTimes[today] = elapsedTime;
+    }
+    localStorage.setItem("studyTimes", JSON.stringify(storedTimes));
+    displayRecordedTimes();
     resetTimer();
   }
-}
 
-document.addEventListener("DOMContentLoaded", () => {
-  const now = new Date();
-  localStorage.setItem("lastLogDate", now);
-  setInterval(checkNewDay, 60000); // Check every minute if a new day has started
+  function resetTimer() {
+    elapsedTime = 0;
+    updateTimerDisplay();
+    startButton.disabled = false;
+    stopButton.disabled = true;
+    recordButton.disabled = true;
+  }
+
+  function displayRecordedTimes() {
+    const storedTimes = JSON.parse(localStorage.getItem("studyTimes")) || {};
+    recordedTimesList.innerHTML = "";
+    for (const [date, time] of Object.entries(storedTimes)) {
+      const timeString = new Date(time).toISOString().substr(11, 8); // Format: HH:MM:SS
+      const listItem = document.createElement("li");
+      listItem.textContent = `${date}: ${timeString}`;
+      listItem.className = "list-group-item";
+      recordedTimesList.appendChild(listItem);
+    }
+  }
+
+  startButton.addEventListener("click", startTimer);
+  stopButton.addEventListener("click", stopTimer);
+  recordButton.addEventListener("click", recordTime);
+
+  updateTimerDisplay();
+  displayRecordedTimes();
+  stopButton.disabled = true;
+  recordButton.disabled = true;
 });
