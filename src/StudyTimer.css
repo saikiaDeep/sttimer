@@ -1,0 +1,81 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+  body {
+    background-color: #f8f9fa;
+    padding: 0;
+    margin: 0;
+  }
+  
+  h1, h2 {
+    color: #343a40;
+  }
+  
+  #timer {
+    margin: 20px 0;
+  }
+  
+  .btn {
+    width: 100%;
+    max-width: 150px; 
+    margin: 10px 0; 
+  }
+  
+  @media (min-width: 768px) {
+    .btn {
+        width: auto; 
+        margin: 0 10px; 
+    }
+  }
+  
+  #recordedTimes {
+    margin-top: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  .list-group-item {
+    background-color: #fff;
+    color: #343a40;
+  }
+  
+  
+  .container {
+    padding: 0 15px;
+  }
+  
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  .col-md-6 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  @media (max-width: 576px) {
+    .display-4 {
+        font-size: 2.5rem; 
+    }
+  
+    .list-group-item {
+        font-size: 0.9rem; 
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .container {
+        padding: 0 30px;
+    }
+  }
