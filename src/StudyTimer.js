@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./StudyTimer.css";
+import { auth } from "./firebase";
+import { Helmet } from "react-helmet";
 const StudyTimer = () => {
   const [timer, setTimer] = useState(null);
   const [startTime, setStartTime] = useState(0);
@@ -8,6 +10,7 @@ const StudyTimer = () => {
   const [records, setRecords] = useState(
     JSON.parse(localStorage.getItem("studyTimes")) || {}
   );
+  const [titleText, setTitleText] = useState("Study Timer");
 
   useEffect(() => {
     if (isRunning) {
@@ -30,20 +33,12 @@ const StudyTimer = () => {
   };
 
   const updateTitle = () => {
-    const titleElement = document.getElementById("title");
-    const faviconElement = document.getElementById("favicon");
     if (elapsedTime === 0) {
-      titleElement.textContent = "Study Timer";
-      titleElement.style.color = "blue";
-      faviconElement.href = "raw/default.png";
+      setTitleText("Study Timer");
     } else if (isRunning) {
-      titleElement.style.color = "green"; // Timer is running
-      faviconElement.href = "raw/go.png";
-      titleElement.textContent = formatTime(elapsedTime);
+      setTitleText(formatTime(elapsedTime));
     } else {
-      titleElement.style.color = "red"; // Timer is stopped
-      faviconElement.href = "raw/stop.png";
-      titleElement.textContent = formatTime(elapsedTime);
+      setTitleText(formatTime(elapsedTime));
     }
   };
 
@@ -82,6 +77,9 @@ const StudyTimer = () => {
 
   return (
     <div className="container">
+      <Helmet>
+        <title>{titleText}</title>
+      </Helmet>
       <div className="row mt-5">
         <div className="col-md-6 offset-md-3 text-center">
           <h1 id="title">Study Timer</h1>
@@ -118,8 +116,19 @@ const StudyTimer = () => {
             {getRecordedTimes()}
           </ul>
         </div>
+        <div className="row mt-5">
+          <div className="col-md-6 offset-md-3 text-center">
+            <button
+              className="btn btn-danger btn-lg mx-2"
+              onClick={() => auth.signOut()}
+            >
+              Sign Out
+            </button>
+          </div>
+        </div>
       </div>
-      <link id="favicon" rel="icon" href="raw/default.png" />
+
+      <link id="favicon" rel="icon" href="../raw/default.png" />
     </div>
   );
 };
