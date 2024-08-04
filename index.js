@@ -4,16 +4,34 @@ document.addEventListener("DOMContentLoaded", (event) => {
   let elapsedTime = 0;
 
   const timerDisplay = document.getElementById("timer");
+  const titleDisplay = document.getElementById("title");
   const startButton = document.getElementById("startButton");
   const stopButton = document.getElementById("stopButton");
   const recordButton = document.getElementById("recordButton");
   const recordedTimesList = document.getElementById("recordedTimes");
+  const favicon = document.getElementById("favicon");
   function updateTimerDisplay() {
     const time = new Date(elapsedTime);
     const hours = String(time.getUTCHours()).padStart(2, "0");
     const minutes = String(time.getUTCMinutes()).padStart(2, "0");
     const seconds = String(time.getUTCSeconds()).padStart(2, "0");
     timerDisplay.textContent = `${hours}:${minutes}:${seconds}`;
+    updateTitle(hours, minutes, seconds);
+  }
+  function updateTitle(hours, minutes, seconds) {
+    if (elapsedTime === 0) {
+      titleDisplay.textContent = "Study Timer";
+      titleDisplay.style.color = "blue";
+      favicon.href = "raw/default.png";
+    } else if (startButton.disabled && recordButton.disabled) {
+      titleDisplay.style.color = "green"; // Timer is running
+      favicon.href = "raw/go.png";
+      titleDisplay.textContent = `${hours}:${minutes}:${seconds}`;
+    } else if (stopButton.disabled) {
+      titleDisplay.style.color = "red"; // Timer is stopped
+      favicon.href = "raw/stop.png";
+      titleDisplay.textContent = `${hours}:${minutes}:${seconds}`;
+    }
   }
 
   function startTimer() {
@@ -32,6 +50,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     startButton.disabled = false;
     stopButton.disabled = true;
     recordButton.disabled = false;
+    updateTimerDisplay();
   }
 
   function recordTime() {
