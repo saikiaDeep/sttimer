@@ -120,15 +120,16 @@ const StudyTimer = () => {
           <div className="col-md-6 offset-md-3 text-center">
             <button
               className="btn btn-danger btn-lg mx-2"
-              onClick={() => auth.signOut()}
+              onClick={() => {
+                auth.signOut();
+                setTitleText("Study Timer");
+              }}
             >
               Sign Out
             </button>
           </div>
         </div>
       </div>
-
-      <link id="favicon" rel="icon" href="../raw/default.png" />
     </div>
   );
 };
