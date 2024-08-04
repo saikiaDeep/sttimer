@@ -1,5 +1,7 @@
 body {
     background-color: #f8f9fa;
+    padding: 0;
+    margin: 0;
 }
 
 h1, h2 {
@@ -11,7 +13,16 @@ h1, h2 {
 }
 
 .btn {
-    width: 100px;
+    width: 100%;
+    max-width: 150px; 
+    margin: 10px 0; 
+}
+
+@media (min-width: 768px) {
+    .btn {
+        width: auto; 
+        margin: 0 10px; 
+    }
 }
 
 #recordedTimes {
@@ -23,4 +34,35 @@ h1, h2 {
 .list-group-item {
     background-color: #fff;
     color: #343a40;
+}
+
+
+.container {
+    padding: 0 15px;
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.col-md-6 {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+@media (max-width: 576px) {
+    .display-4 {
+        font-size: 2.5rem; 
+    }
+
+    .list-group-item {
+        font-size: 0.9rem; 
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding: 0 30px;
+    }
 }
