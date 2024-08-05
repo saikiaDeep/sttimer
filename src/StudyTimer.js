@@ -107,6 +107,7 @@ const StudyTimer = () => {
       );
     });
   };
+  const hasRecords = Object.keys(records).length > 0;
 
   return (
     <div className="container">
@@ -146,7 +147,11 @@ const StudyTimer = () => {
         <div className="col-md-6 offset-md-3">
           <h3>Recorded Times of {user.displayName} :</h3>
           <ul id="recordedTimes" className="list-group">
-            {getRecordedTimes()}
+            {hasRecords ? (
+              getRecordedTimes()
+            ) : (
+              <li className="list-group-item">No data available</li>
+            )}
           </ul>
         </div>
         <div className="row mt-5 signout">
