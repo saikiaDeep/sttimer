@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
@@ -19,6 +20,10 @@ body {
   
   h1, h2 {
     color: #343a40;
+  }
+  #title{
+    color: #1383f3;
+    font-size: 50px;
   }
   
   #timer {
@@ -51,7 +56,11 @@ body {
   
   
   .container {
-    padding: 0 15px;
+    padding-bottom: 50px;
+    
+  }
+  .signout{
+    padding-bottom: 50px;
   }
   
   .row {

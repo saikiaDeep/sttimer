@@ -2,14 +2,46 @@ import React, { useState, useEffect } from "react";
 import "./StudyTimer.css";
 import { auth } from "./firebase";
 import { Helmet } from "react-helmet";
+import { db } from "./firebase";
+import { onValue, ref } from "firebase/database";
+import { set } from "firebase/database";
+import { useAuthState } from "react-firebase-hooks/auth";
+
 const StudyTimer = () => {
   const [timer, setTimer] = useState(null);
   const [startTime, setStartTime] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [records, setRecords] = useState(
-    JSON.parse(localStorage.getItem("studyTimes")) || {}
-  );
+
+  const [user] = useAuthState(auth);
+
+  const [records, setRecords] = useState([]);
+  useEffect(() => {
+    const query = ref(db, `times/${user.uid}`);
+    onValue(query, (snapshot) => {
+      const data = snapshot.val();
+      if (snapshot.exists()) {
+        const formattedRecords = Object.entries(data).reduce(
+          (acc, [date, time]) => {
+            acc[date] = time;
+            return acc;
+          },
+          {}
+        );
+        setRecords(formattedRecords);
+      }
+    });
+  }, []);
+  const writeData = (path, data) => {
+    const dbRef = ref(db, path);
+    set(dbRef, data)
+      .then(() => {
+        console.log("Data written successfully");
+      })
+      .catch((error) => {
+        console.error("Error writing data:", error);
+      });
+  };
   const [titleText, setTitleText] = useState("Study Timer");
 
   useEffect(() => {
@@ -57,9 +89,10 @@ const StudyTimer = () => {
   const handleRecord = () => {
     const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
     const updatedRecords = { ...records };
+
     updatedRecords[today] = (updatedRecords[today] || 0) + elapsedTime;
     setRecords(updatedRecords);
-    localStorage.setItem("studyTimes", JSON.stringify(updatedRecords));
+    writeData("times/" + user.uid, updatedRecords);
     setElapsedTime(0);
     setIsRunning(false);
   };
@@ -111,12 +144,12 @@ const StudyTimer = () => {
       </div>
       <div className="row mt-5">
         <div className="col-md-6 offset-md-3">
-          <h2>Recorded Times</h2>
+          <h3>Recorded Times of {user.displayName} :</h3>
           <ul id="recordedTimes" className="list-group">
             {getRecordedTimes()}
           </ul>
         </div>
-        <div className="row mt-5">
+        <div className="row mt-5 signout">
           <div className="col-md-6 offset-md-3 text-center">
             <button
               className="btn btn-danger btn-lg mx-2"
