@@ -97,17 +97,29 @@ const StudyTimer = () => {
     setIsRunning(false);
   };
 
-  const getRecordedTimes = () => {
+  const getRecordedTimes = (onlyToday) => {
     return Object.entries(records).map(([date, time], index) => {
       const timeString = formatTime(time);
-      return (
-        <li key={index} className="list-group-item">
-          {date}: {timeString}
-        </li>
-      );
+      if (onlyToday === true) {
+        if (date === today) {
+          return (
+            <li className="list-group-item">
+              {date}: {timeString}
+            </li>
+          );
+        }
+      } else {
+        return (
+          <li key={index} className="list-group-item">
+            {date}: {timeString}
+          </li>
+        );
+      }
     });
   };
+  const today = new Date().toISOString().split("T")[0];
   const hasRecords = Object.keys(records).length > 0;
+  const hasTodayRecord = records && records[today] !== undefined;
 
   return (
     <div className="container">
@@ -145,10 +157,22 @@ const StudyTimer = () => {
       </div>
       <div className="row mt-5">
         <div className="col-md-6 offset-md-3">
+          <h3>Today's time : {}</h3>
+          <ul id="recordedTimes" className="list-group">
+            {hasTodayRecord ? (
+              getRecordedTimes(true)
+            ) : (
+              <li className="list-group-item">No data available</li>
+            )}
+          </ul>
+        </div>
+      </div>
+      <div className="row mt-5">
+        <div className="col-md-6 offset-md-3">
           <h3>Recorded Times of {user.displayName} :</h3>
           <ul id="recordedTimes" className="list-group">
             {hasRecords ? (
-              getRecordedTimes()
+              getRecordedTimes(false)
             ) : (
               <li className="list-group-item">No data available</li>
             )}
